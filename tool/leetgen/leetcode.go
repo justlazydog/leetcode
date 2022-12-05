@@ -67,6 +67,9 @@ func getQuestionContent(str string) string {
 	// 多行空行转为一行
 	reg = regexp.MustCompile("\n\n")
 	str = reg.ReplaceAllLiteralString(str, "\n")
+	// NBSP转为空格
+	reg = regexp.MustCompile("\u00a0")
+	str = reg.ReplaceAllLiteralString(str, " ")
 	// 特殊字符替换
 	str = strings.ReplaceAll(str, "&nbsp;", " ")
 	str = strings.ReplaceAll(str, "&amp;", "&")

@@ -62,7 +62,7 @@ func generateFile(rootPath, titleSlug string) error {
 // getQuestionContent make html string into text
 func getQuestionContent(str string) string {
 	// 去除html
-	reg := regexp.MustCompile("<[^>]*>")
+	reg := regexp.MustCompile("<[^<]*>")
 	str = reg.ReplaceAllLiteralString(str, "")
 	// 多行空行转为一行
 	reg = regexp.MustCompile("\n\n")

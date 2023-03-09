@@ -23,21 +23,22 @@
 package generateParenthesis
 
 func generateParenthesis(n int) []string {
-	res := make([]string, 0)
-	// left,right mean open and close brackets num
-	var dfs func(left, right int, cur string)
-	dfs = func(left, right int, cur string) {
-		if left == 0 && right == 0 {
-			res = append(res, cur)
-			return
-		}
-		if left > 0 {
-			dfs(left-1, right, cur+"(")
-		}
-		if right > 0 && right > left {
-			dfs(left, right-1, cur+")")
-		}
-	}
-	dfs(n, n, "")
+	var res []string
+	dfs(n, n, "", &res)
 	return res
+}
+
+func dfs(left, right int, s string, res *[]string) {
+	if left == 0 && right == 0 {
+		*res = append(*res, s)
+		return
+	}
+
+	if left > 0 {
+		dfs(left-1, right, s+"(", res)
+	}
+
+	if right > 0 && right > left {
+		dfs(left, right-1, s+")", res)
+	}
 }

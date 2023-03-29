@@ -38,7 +38,9 @@ import "sort"
 
 func maxSatisfaction(satisfaction []int) int {
 	var res int
-	sort.Ints(satisfaction)
+	sort.Ints(satisfaction) // 将满意度数组按照从小到大排序
+
+	// 如果第一个元素就是非负数，则全部选中，顺序为1, 2, 3, ..., n
 	if satisfaction[0] >= 0 {
 		for i, s := range satisfaction {
 			res += (i + 1) * s
@@ -47,23 +49,24 @@ func maxSatisfaction(satisfaction []int) int {
 	}
 
 	n := len(satisfaction)
+	// 如果最后一个元素就是非正数，则全部不选
 	if satisfaction[n-1] <= 0 {
 		return 0
 	}
 
+	// 动态规划求解
 	dp := make([]int, n+1)
-	dp[0] = 0
-	dp[1] = satisfaction[n-1]
+	dp[1] = satisfaction[n-1] // 只选最后一个元素的情况
 	for i := 2; i <= n; i++ {
-		if satisfaction[n-i] < 0 {
+		if satisfaction[n-i] < 0 { // 如果当前元素为负数
 			tmp := 0
-			for j := i; j > 0; j-- {
+			for j := i; j > 0; j-- { // 找到最大的正数子序列
 				tmp += (i - j + 1) * satisfaction[n-j]
 			}
 			dp[i] = max(dp[i-1], tmp)
-		} else {
-			dp[i] = satisfaction[n-i] + dp[i-1]
-			for j := i; j > 1; j-- {
+		} else { // 如果当前元素为非负数
+			dp[i] = satisfaction[n-i] + dp[i-1] // 考虑选当前元素的情况
+			for j := i; j > 1; j-- {            // 继续选前面的正数元素
 				dp[i] += satisfaction[n-(j-1)]
 			}
 		}

@@ -66,3 +66,24 @@ func mergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 
 	return head.Next
 }
+
+func mergeTwoLists2(list1 *ListNode, list2 *ListNode) *ListNode {
+	if list1 == nil {
+		return list2
+	}
+
+	if list2 == nil {
+		return list1
+	}
+
+	dummy := new(ListNode)
+	if list1.Val < list2.Val {
+		dummy.Val = list1.Val
+		dummy.Next = mergeTwoLists2(list1.Next, list2)
+	} else {
+		dummy.Val = list2.Val
+		dummy.Next = mergeTwoLists2(list1, list2.Next)
+	}
+
+	return dummy
+}

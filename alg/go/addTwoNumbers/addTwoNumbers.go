@@ -32,6 +32,11 @@
 
 package main
 
+import (
+	"math/rand"
+	"time"
+)
+
 /**
 * Definition for singly-linked list.
 * type ListNode struct {
@@ -60,4 +65,51 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		carry /= 10
 	}
 	return res.Next
+}
+
+// generateLinkedList generates a linked list of random length between minLen and maxLen
+// with random integer values between minValue and maxValue.
+func generateLinkedList(minLen, maxLen, minValue, maxValue int) *ListNode {
+	rand.Seed(time.Now().UnixNano())
+	n := rand.Intn(maxLen-minLen+1) + minLen
+	head := &ListNode{}
+
+	for i := 0; i < n; i++ {
+		val := rand.Intn(maxValue-minValue+1) + minValue
+		node := &ListNode{Val: val, Next: head.Next}
+		head.Next = node
+	}
+
+	return head.Next
+}
+
+// recursion
+func addTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
+	return addTwoNumbersHelper(l1, l2, 0)
+}
+
+func addTwoNumbersHelper(l1 *ListNode, l2 *ListNode, carry int) *ListNode {
+	if l1 == nil && l2 == nil {
+		return nil
+	}
+
+	v1, v2 := 0, 0
+	if l1 != nil {
+		v1 = l1.Val
+		l1 = l1.Next
+	}
+
+	if l2 != nil {
+		v2 = l2.Val
+		l2 = l2.Next
+	}
+
+	sum := v1 + v2 + carry
+	carry = sum / 10
+	node := &ListNode{Val: sum % 10}
+	node.Next = addTwoNumbersHelper(l1, l2, carry)
+	if node.Next == nil && carry != 0 {
+		node.Next = &ListNode{Val: carry}
+	}
+	return node
 }
